@@ -379,47 +379,57 @@ function setAuto(v){
 }
 
 /* ============ Música ambiental sintetizada (original, sin derechos) ============ */
-let AC=null,MF=null,MG=null,MON=false,mtm=0,mi=0;
-const CH=[[110,164.81,261.63,329.63],[87.31,130.81,220,329.63],[130.81,196,329.63,392],[98,146.83,246.94,293.66]];
-function chord(t,fs){fs.forEach(f=>{const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=f;o.detune.value=(Math.random()-.5)*8;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+1.8);g.gain.linearRampToValueAtTime(0,t+7);o.connect(g);g.connect(MF);o.start(t);o.stop(t+7.2)})}
-function duck(){if(!MG||!MON)return;const pl=[...document.querySelectorAll('.mb audio')].some(e=>!e.paused&&!e.muted&&!e.ended);MG.gain.setTargetAtTime(pl?.02:.11,AC.currentTime,.3)}
-function setMusic(v){
-  MON=v;$('#mu').textContent=v?'Música: sí':'Música: no';
-  if(v){
-    try{
-      if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();MF=AC.createBiquadFilter();MF.type='lowpass';MF.frequency.value=1100;MG=AC.createGain();MG.gain.value=.11;MF.connect(MG);MG.connect(AC.destination)}
-      AC.resume();const step=()=>chord(AC.currentTime+.05,CH[mi++%4]);step();mtm=setInterval(step,6000);duck();
-    }catch(e){MON=false;$('#mu').textContent='Música: no'}
-  }else{
-    clearInterval(mtm);if(MG)MG.gain.setTargetAtTime(0,AC.currentTime,.4);
-    setTimeout(()=>{if(!MON&&AC)AC.suspend()},2000);
+/* ============ Música ambiental (archivo local con ducking) ============ */
+let MON = false;
+const BGM = new Audio('./audio/fondo.mp3'); // Ajusta la extensión si es .wav o .m4a
+BGM.loop = true;
+BGM.volume = 0.25; // Volumen normal (25%)
+
+let fadeTmr = 0;
+function fadeTo(target) {
+  clearInterval(fadeTmr);
+  fadeTmr = setInterval(() => {
+    const diff = target - BGM.volume;
+    if (Math.abs(diff) < 0.01) {
+      BGM.volume = target;
+      clearInterval(fadeTmr);
+    } else {
+      BGM.volume = Math.max(0, Math.min(1, BGM.volume + diff * 0.2));
+    }
+  }, 40);
+}
+
+function duck() {
+  if (!MON) return;
+  const pl = [...document.querySelectorAll('.mb audio')].some(
+    e => !e.paused && !e.muted && !e.ended
+  );
+  // Baja al 6% mientras hablas y sube al 25% al terminar la locución
+  fadeTo(pl ? 0.06 : 0.25);
+}
+
+function setMusic(v) {
+  MON = v;
+  $('#mu').textContent = v ? 'Música: sí' : 'Música: no';
+  if (v) {
+    BGM.play().then(() => duck()).catch(() => {
+      MON = false;
+      $('#mu').textContent = 'Música: no';
+    });
+  } else {
+    BGM.pause();
   }
 }
-['play','pause','ended'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.matches&&e.target.matches('audio'))setTimeout(duck,50)},true));
 
-/* ============ Eventos ============ */
-function sel(el){const id=el.dataset.pk,j=+el.dataset.j;document.querySelectorAll(`[data-pk="${id}"]`).forEach(x=>x.setAttribute('aria-pressed',x===el));showPk(id,j)}
-document.addEventListener('click',e=>{
-  const b=e.target.closest('[data-pk],button');
-  if(!b)return;
-  if(b.dataset.g!==undefined)return go(+b.dataset.g);
-  if(b.dataset.pk)return sel(b);
-});
-$('#pv').onclick=()=>go(cur-1);
-$('#nx').onclick=()=>go(cur+1);
-$('#au').onclick=()=>setAuto(!AUTO);
-$('#mu').onclick=()=>setMusic(!MON);
-$('#ixb').onclick=()=>$('#ix').classList.toggle('on');
-$('#start-btn').onclick=()=>{setAuto(true);if(!MON)setMusic(true)};
-addEventListener('keydown',e=>{
-  const t=e.target;if(t.tagName==='AUDIO'||t.tagName==='VIDEO')return;
-  if((e.key==='Enter'||e.key===' ')&&t.dataset&&t.dataset.pk&&t.tagName!=='BUTTON'){e.preventDefault();return sel(t)}
-  if(e.key==='ArrowRight')go(cur+1);
-  else if(e.key==='ArrowLeft')go(cur-1);
-  else if(e.key==='Home')go(0);
-  else if(e.key==='End')go(S.length-1);
-  else if(e.key==='Escape')$('#ix').classList.remove('on');
-});
+['play', 'pause', 'ended'].forEach(ev =>
+  document.addEventListener(
+    ev,
+    e => {
+      if (e.target.matches && e.target.matches('.mb audio')) setTimeout(duck, 50);
+    },
+    true
+  )
+);
 
 /* ============ Tema y reloj ============ */
 const R=document.documentElement,mq=matchMedia('(prefers-color-scheme: dark)');
