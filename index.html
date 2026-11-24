@@ -378,46 +378,59 @@ function setAuto(v){
   else{clearTimeout(tmr);document.querySelectorAll('.mb audio').forEach(e=>e.pause())}
 }
 
-/* ============ Música ambiental sintetizada (original, sin derechos) ============ */
-/* ============ Música ambiental (archivo local con ducking) ============ */
+/* ============ Música ambiental (archivo local con Web Audio GainNode) ============ */
 let MON = false;
-const BGM = new Audio('./audio/fondo.mp3'); // Verifica que el nombre y extensión coincidan exactamente
-BGM.loop = true;
-BGM.volume = 0.25;
+let BGM_CTX = null;
+let BGM_GAIN = null;
 
-let fadeTmr = 0;
-function fadeTo(target) {
-  clearInterval(fadeTmr);
-  fadeTmr = setInterval(() => {
-    const diff = target - BGM.volume;
-    if (Math.abs(diff) < 0.01) {
-      BGM.volume = target;
-      clearInterval(fadeTmr);
-    } else {
-      BGM.volume = Math.max(0, Math.min(1, BGM.volume + diff * 0.2));
-    }
-  }, 40);
+const BGM = new Audio('./audio/fondo.mp3'); // Verifica la extensión (.mp3, .m4a, .wav)
+BGM.loop = true;
+BGM.crossOrigin = 'anonymous';
+
+function initBGMGraph() {
+  if (BGM_CTX) return;
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  BGM_CTX = new AudioCtx();
+  const source = BGM_CTX.createMediaElementSource(BGM);
+  BGM_GAIN = BGM_CTX.createGain();
+  BGM_GAIN.gain.value = 0.30; // Volumen normal (30%)
+  source.connect(BGM_GAIN);
+  BGM_GAIN.connect(BGM_CTX.destination);
 }
 
 function duck() {
-  if (!MON) return;
+  if (!MON || !BGM_GAIN || !BGM_CTX) return;
   const pl = [...document.querySelectorAll('.mb audio')].some(
     e => !e.paused && !e.muted && !e.ended
   );
-  fadeTo(pl ? 0.06 : 0.25);
+  // 0.12 (12%) mientras habla la locución | 0.30 (30%) en pausas o sin locución
+  const target = pl ? 0.12 : 0.30;
+  BGM_GAIN.gain.setTargetAtTime(target, BGM_CTX.currentTime, 0.25);
+
+  // Asegura que el navegador no haya pausado la música al iniciar la locución
+  if (BGM.paused) {
+    BGM.play().catch(() => {});
+  }
 }
 
 function setMusic(v) {
   MON = v;
   $('#mu').textContent = v ? 'Música: sí' : 'Música: no';
   if (v) {
-    BGM.play()
-      .then(() => duck())
-      .catch(err => {
-        console.warn('No se pudo reproducir fondo.mp3:', err);
-        MON = false;
-        $('#mu').textContent = 'Música: no';
-      });
+    try {
+      initBGMGraph();
+      if (BGM_CTX.state === 'suspended') BGM_CTX.resume();
+      BGM.play()
+        .then(() => duck())
+        .catch(err => {
+          console.warn('Error al reproducir fondo.mp3:', err);
+          MON = false;
+          $('#mu').textContent = 'Música: no';
+        });
+    } catch (e) {
+      MON = false;
+      $('#mu').textContent = 'Música: no';
+    }
   } else {
     BGM.pause();
   }
@@ -428,7 +441,7 @@ function setMusic(v) {
     ev,
     e => {
       if (e.target && e.target.matches && e.target.matches('.mb audio')) {
-        setTimeout(duck, 50);
+        setTimeout(duck, 60);
       }
     },
     true
