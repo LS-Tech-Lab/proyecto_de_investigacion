@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Unidad I · Conceptos básicos de investigación — Proyecto I, Maestría en Gerencia de Innovación Tecnológica, UNERMB.">
+<meta name="theme-color" content="#1E4E8C">
+<title>Unidad I · Conceptos básicos de investigación — Luis Solórzano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6FA;--sf:#FFFFFF;--ink:#0F1B2D;--mu:#4A5568;--ln:#DDE3EC;--ac:#1E4E8C;
+  --c1:#1E4E8C;--c2:#0E8A7D;--c3:#D4553F;--c4:#B87A0C;--c5:#6A56C9;--c6:#51657A;--bad:#B3322B;
+  --sh-1:0 1px 2px rgba(15,43,76,.06),0 2px 6px rgba(15,43,76,.04);
+  --sh-2:0 2px 4px rgba(15,43,76,.06),0 10px 20px rgba(15,43,76,.08);
+  --sh-3:0 6px 12px rgba(15,43,76,.08),0 20px 40px rgba(15,43,76,.12);
+  --sh:var(--sh-2);
+  color-scheme:light;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1220;--sf:#151D2E;--ink:#EDF1F7;--mu:#9DA9BC;--ln:#26314A;--ac:#6FA3EF;
+  --c1:#6FA3EF;--c2:#4CC2B2;--c3:#F2806B;--c4:#E5B24A;--c5:#A394F0;--c6:#9FB2C8;--bad:#F08A84;
+  --sh-1:0 1px 2px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.3);
+  --sh-2:0 2px 4px rgba(0,0,0,.3),0 10px 20px rgba(0,0,0,.4);
+  --sh-3:0 6px 12px rgba(0,0,0,.4),0 20px 40px rgba(0,0,0,.5);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1220;--sf:#151D2E;--ink:#EDF1F7;--mu:#9DA9BC;--ln:#26314A;--ac:#6FA3EF;
+  --c1:#6FA3EF;--c2:#4CC2B2;--c3:#F2806B;--c4:#E5B24A;--c5:#A394F0;--c6:#9FB2C8;--bad:#F08A84;
+  --sh-1:0 1px 2px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.3);
+  --sh-2:0 2px 4px rgba(0,0,0,.3),0 10px 20px rgba(0,0,0,.4);
+  --sh-3:0 6px 12px rgba(0,0,0,.4),0 20px 40px rgba(0,0,0,.5);
+  color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:20px/1.45 Inter,system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--ac);outline-offset:3px;border-radius:6px}
+.top{height:48px;flex:none;display:flex;align-items:center;gap:14px;padding:0 24px;font:600 12px Inter,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mu)}
+.top .sp{flex:1}.top b{color:var(--ink)}
+.top #sec{display:inline-flex;align-items:center;gap:7px;transition:color .35s}
+.top #sec::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.9;flex:none}
+.tb{border:1px solid var(--ln);background:var(--sf);border-radius:99px;padding:5px 13px;font:600 12px Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)}
+.pgs{display:flex;gap:3px;padding:0 24px;height:5px;flex:none}
+.pgs button{flex:1;border:0;border-radius:3px;background:var(--ln);padding:0;transition:background .3s,transform .2s,box-shadow .2s}
+.pgs button:hover{transform:scaleY(1.8)}
+.pgs .d{background:var(--mu)}
+.pgs .c{
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--c2) 55%,transparent),
+             0 2px 10px color-mix(in srgb,var(--c2) 30%,transparent)}
+main{flex:1;position:relative;min-height:0}
+#st{position:absolute;left:0;top:0;width:1280px;height:640px;transform-origin:0 0}
+.s{display:none;position:absolute;inset:0;padding:22px 40px;grid-template-columns:1fr 252px;column-gap:30px;overflow:hidden}
+.s.on{display:grid;animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes dpIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.s.on .g > *,.s.on .obj > *,.s.on .stack > *{
+  animation:cardIn .4s cubic-bezier(.2,.7,.3,1) both;
+  animation-delay:calc(var(--i,0)*35ms)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.mn{min-width:0;min-height:0;display:flex;flex-direction:column;gap:12px;position:relative}
+.wm{
+  position:absolute;right:300px;top:-6px;font:800 120px/1 'Plus Jakarta Sans',sans-serif;
+  color:transparent;-webkit-text-stroke:1.5px var(--ink);opacity:.08;
+  pointer-events:none}
+h2{font:800 36px/1.1 'Plus Jakarta Sans',sans-serif;margin:0;letter-spacing:-.02em;position:relative;padding-bottom:12px}
+h2::after{content:"";position:absolute;left:0;bottom:0;width:70px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--c1),var(--c2))}
+.lead{font-size:20px;line-height:1.38;margin:0}
+.tag{font:600 13px Inter,sans-serif;text-transform:uppercase;letter-spacing:.09em;color:var(--mu);margin:0 0 6px}
+.src{margin:auto 0 0;font-size:15px;color:var(--mu);border-top:1px solid var(--ln);padding-top:7px}
+.g{display:grid;gap:12px}
+.pg2{grid-template-columns:repeat(2,1fr)}.pg3{grid-template-columns:repeat(3,1fr)}.pg4{grid-template-columns:repeat(4,1fr)}.pg5{grid-template-columns:repeat(5,1fr)}.pg6{grid-template-columns:repeat(6,1fr)}
+.pk{
+  display:flex;flex-direction:column;gap:3px;text-align:left;padding:12px 14px;
+  border-radius:14px;border:1px solid var(--ln);border-top:4px solid var(--k);
+  background:var(--sf);box-shadow:var(--sh-2);
+  transition:transform .15s,background .15s,border-color .15s,box-shadow .15s}
+.pk:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb,var(--k) 40%,var(--ln));
+  box-shadow:var(--sh-3)}
+.pk .n{font:700 13px Inter,sans-serif;letter-spacing:.06em;color:var(--k)}
+.pk .ico{width:30px;height:30px;color:var(--k);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pk b{font:700 19px/1.15 'Plus Jakarta Sans',sans-serif}
+.pk small{font-size:16px;color:var(--mu);line-height:1.25}
+.pk[aria-pressed=true]{
+  background:color-mix(in srgb,var(--k) 14%,var(--sf));
+  border-color:var(--k);
+  box-shadow:0 0 0 1.5px var(--k),var(--sh-2)}
+.pg6 .pk b{font-size:16px}.pg6 .pk{padding:11px 10px}
+.pg5.tl .pk:not(:last-child)::after{content:"›";position:absolute;right:-12px;top:50%;font:700 24px sans-serif;color:var(--mu)}
+.pg5.tl .pk{position:relative}
+.bar{display:block;height:8px;border-radius:4px;background:var(--ln);margin-top:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--k);transition:width .5s ease}
+.dp{
+  flex:1;min-height:0;overflow:hidden;background:var(--sf);
+  border:1px solid var(--ln);border-left:6px solid var(--k,var(--ac));
+  border-radius:14px;padding:18px 26px;font-size:21px;line-height:1.4;
+  box-shadow:var(--sh-3)}
+.dp h3,.dp p{animation:dpIn .28s ease both}
+.dp p:nth-of-type(2){animation-delay:.05s}
+.dp p:nth-of-type(3){animation-delay:.1s}
+.dp h3{font:800 30px/1.1 'Plus Jakarta Sans',sans-serif;margin:0 0 10px;color:var(--k)}
+.dp p{margin:0 0 11px}.dp .lb{display:block;font:600 12.5px Inter,sans-serif;text-transform:uppercase;letter-spacing:.09em;color:var(--mu);margin-bottom:1px}
+.dp .cite{font-size:17px;color:var(--mu)}
+.row{display:flex;gap:20px;flex:1;min-height:0}.vz{flex:none;width:420px}.vz svg{width:100%;height:100%}
+svg text{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700}
+.nd{cursor:pointer;outline:none}.nd:focus-visible .bx{stroke-width:4}
+.nd .bx{fill:color-mix(in srgb,var(--k) 12%,var(--sf));stroke:var(--k);stroke-width:2.5;transition:fill .18s,stroke .18s,stroke-width .15s}
+.nd text{fill:var(--k)}
+.nd[aria-pressed=true] .bx{fill:var(--k);stroke-width:3}.nd[aria-pressed=true] text{fill:var(--bg)}
+.nd:hover .bx{stroke-width:4}
+.hero{
+  flex:1;border-radius:22px;padding:34px 44px;color:#fff;
+  background:linear-gradient(135deg,#0F2B4C 0%,#1E4E8C 58%,#0E8A7D 100%);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;
+  box-shadow:var(--sh-3)}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 380px at 82% 18%,rgba(14,138,125,.35),transparent 70%),
+    radial-gradient(ellipse 480px 460px at 12% 88%,rgba(30,78,140,.45),transparent 70%)}
+.hero svg{position:absolute;right:-10px;top:0;height:100%;opacity:.5}
+.hero>*:not(svg){position:relative}
+.hero .eb{font:600 13px Inter,sans-serif;text-transform:uppercase;letter-spacing:.1em;opacity:.85;margin:0}
+.hero h1{font:800 52px/1.05 'Plus Jakarta Sans',sans-serif;letter-spacing:-.025em;margin:16px 0 18px;max-width:640px}
+.hero .meta{font-size:20px;line-height:1.5;opacity:.95;margin:0}
+.hero .pill{display:inline-block;margin-top:20px;padding:6px 16px;border-radius:99px;background:rgba(255,255,255,.16);font:600 14px Inter,sans-serif;width:max-content}
+.start{
+  display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:11px 22px;
+  border:0;border-radius:99px;background:#fff;color:#0F2B4C;
+  font:700 15px 'Plus Jakarta Sans',sans-serif;
+  box-shadow:var(--sh-3);
+  width:max-content;transition:transform .15s,box-shadow .15s}
+.start:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+.start svg{width:18px;height:18px;fill:currentColor}
+.q1{font:800 40px/1.12 'Plus Jakarta Sans',sans-serif;letter-spacing:-.02em;margin:2px 0 4px}
+.q1 span{color:var(--c2)}
+.obj{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ob{background:var(--sf);border:1px solid var(--ln);border-top:4px solid var(--k);border-radius:14px;padding:12px 14px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:6px;font-size:18px;line-height:1.3;transition:box-shadow .2s,transform .15s}
+.ob:hover{box-shadow:var(--sh-2);transform:translateY(-2px)}
+.ob .nn{font:800 26px 'Plus Jakarta Sans',sans-serif;color:var(--k);line-height:1}
+.ob .pl{display:flex;flex-wrap:wrap;gap:5px}.ob .pl span{font-size:14px;background:color-mix(in srgb,var(--k) 12%,var(--sf));color:var(--k);padding:2px 9px;border-radius:99px;font-weight:600}
+.ob button{margin-top:auto;border:1px solid var(--k);color:var(--k);background:transparent;border-radius:99px;padding:4px 10px;font:600 13px Inter,sans-serif;align-self:flex-start;transition:background .15s,color .15s}
+.ob button:hover{background:var(--k);color:var(--sf)}
+.pur{border-radius:14px;padding:14px 20px;background:linear-gradient(120deg,var(--c1),var(--c2));color:#fff;font-size:20px;line-height:1.35;box-shadow:var(--sh-2)}
+.pur b{display:block;font:600 12px Inter,sans-serif;text-transform:uppercase;letter-spacing:.1em;opacity:.85;margin-bottom:2px}
+.card{border:1px solid var(--ln);border-top:4px solid var(--k);border-radius:14px;background:var(--sf);padding:12px 18px;box-shadow:var(--sh-1);transition:box-shadow .2s}
+.card:hover{box-shadow:var(--sh-2)}
+.card b{display:block;font:800 20px 'Plus Jakarta Sans',sans-serif;color:var(--k);margin-bottom:2px}.card p{margin:3px 0;font-size:18px;line-height:1.35}
+.ref p{margin:0 0 16px;padding-left:30px;text-indent:-30px;font-size:20px;line-height:1.45}
+.stack{display:flex;flex-direction:column;gap:8px;justify-content:center}
+.band{border-radius:12px;border:2px solid var(--k);background:color-mix(in srgb,var(--k) 10%,var(--sf));padding:10px 16px;font:700 18px 'Plus Jakarta Sans',sans-serif;color:var(--k);text-align:left;position:relative;overflow:hidden;transition:background .2s,color .2s,box-shadow .2s}
+.band:hover{box-shadow:var(--sh-2)}
+.band small{display:block;font:500 14px Inter,sans-serif;color:var(--mu)}
+.band::after{content:"";position:absolute;right:16px;top:12px;bottom:12px;width:70px;background:repeating-linear-gradient(var(--k) 0 3px,transparent 3px 11px);opacity:.28;border-radius:2px}
+.band[aria-pressed=true]{background:var(--k);color:var(--bg);box-shadow:0 0 0 1.5px var(--k),var(--sh-2)}.band[aria-pressed=true] small{color:var(--bg);opacity:.9}.band[aria-pressed=true]::after{background:repeating-linear-gradient(var(--bg) 0 3px,transparent 3px 11px)}
+.md{display:flex;flex-direction:column;gap:8px;padding-top:6px;min-height:0}
+.mb{width:100%;border-radius:14px;background:var(--sf);border:1px solid var(--ln);border-left:4px solid var(--ac);box-shadow:var(--sh-1);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.mb-head{display:flex;align-items:center;gap:8px;font:600 12px Inter,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mu)}
+.mb-head svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mb audio{width:100%;accent-color:var(--ac)}
+.mb .em{color:var(--mu);font-size:14px;line-height:1.4;padding:4px 0}
+.mb .em code{font:600 13px ui-monospace,monospace;background:var(--bg);padding:2px 6px;border-radius:4px;color:var(--ink)}
+.ms{margin:0;font-size:14px;color:var(--mu);min-height:20px}
+.ft{height:46px;flex:none;display:flex;align-items:center;justify-content:center;gap:12px;font:600 13px Inter,sans-serif;color:var(--mu)}
+.ft button{border:1px solid var(--ln);background:var(--sf);border-radius:99px;padding:5px 16px;font-size:15px;color:var(--ink);transition:background .15s,border-color .15s,color .15s}
+.ft button:hover{border-color:var(--ac)}
+.ft .tx{font:600 12px Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.ft #au{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+.ft #au.on{background:var(--c2);border-color:var(--c2);color:#fff}
+#clk,#ct{font-variant-numeric:tabular-nums}
+#ix{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 96%,transparent);z-index:9;display:none;padding:70px 20px 20px;overflow:auto}
+#ix.on{display:block}#ix div{max-width:760px;margin:0 auto;display:grid;gap:6px}
+#ix button{text-align:left;padding:10px 16px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);transition:background .15s,border-color .15s}
+#ix button:hover{border-color:var(--ac)}
+body.mob{overflow:auto;height:auto;min-height:100%}
+body.mob .top{position:sticky;top:0;background:var(--bg);z-index:5;flex-wrap:wrap;height:auto;padding:8px 16px}
+body.mob .pgs{padding:0 16px}body.mob main{flex:none}
+body.mob #st{position:static;width:auto;height:auto;transform:none!important}
+body.mob .s{position:static;grid-template-columns:1fr;padding:20px 16px;overflow:visible;row-gap:16px}
+body.mob .md{padding-top:0}body.mob .mb{width:100%}
+body.mob .pg3,body.mob .pg4,body.mob .pg5,body.mob .pg6,body.mob .obj{grid-template-columns:repeat(2,1fr)}
+body.mob .row{flex-direction:column}body.mob .vz{width:100%;height:auto}body.mob .dp{flex:none;overflow:visible}
+body.mob h2{font-size:26px}body.mob .hero h1{font-size:32px}body.mob .q1{font-size:28px}body.mob .wm{font-size:64px;right:12px}
+body.mob .ft{position:sticky;bottom:0;background:var(--bg);flex-wrap:wrap;height:auto;padding:6px}
+</style>
+</head>
+<body>
+<header class="top"><span><b>Proyecto I · Unidad I</b></span><span id="sec">Inicio</span><span class="sp"></span><span id="clk" title="Tiempo de exposición">00:00</span><button class="tb" id="ixb" aria-label="Abrir índice">Índice</button><button class="tb" id="th" aria-label="Cambiar tema">Modo oscuro</button></header>
+<nav class="pgs" id="pgs" aria-label="Progreso"></nav>
+<main id="mn"><div id="st"></div></main>
+<footer class="ft"><button id="pv" aria-label="Diapositiva anterior">←</button><span id="ct">1 / 15</span><button id="nx" aria-label="Diapositiva siguiente">→</button><button id="au" class="tx" aria-label="Reproducción automática">Reproducción automática</button><button id="mu" class="tx" aria-label="Música ambiental">Música: no</button></footer>
+<div id="ix" role="dialog" aria-label="Índice"><div id="il"></div></div>
+<script>
+const $=(s)=>document.querySelector(s);
+const q=(h,b)=>`<p><span class="lb">${h}</span>${b}</p>`;
+const PK={};
+const IC={sis:'<path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 10.5M3.5 18l1.5 1.5L7.5 16"/>',obj:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3"/>',ver:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11l2 2 4-4"/>',rep:'<path d="M17 2l4 4-4 4M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 01-3 3H3"/>',cri:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2M12 17h.01"/>',acu:'<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>',bar:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',cmp:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',pie:'<path d="M21 12A9 9 0 1112 3v9h9z"/>',doc:'<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>',docs:'<path d="M8 3h7l4 4v11H8zM15 3v4h4M5 7v14h11"/>'};
+const ico=(k)=>`<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
+const chip=(id,j,x,n)=>`<button class="pk" data-pk="${id}" data-j="${j}" aria-pressed="${j===0}" style="--k:var(--c${x.c})">${x.i?ico(x.i):`<span class="n">${x.n||String(j+1).padStart(2,'0')}</span>`}<b>${x.h}</b>${x.s?`<small>${x.s}</small>`:''}${x.bar?`<span class="bar"><i style="width:${x.bar}%"></i></span>`:''}</button>`;
+const pick=(id,cols,items,hint,cls)=>{PK[id]=items;return `<div><p class="tag">${hint||'Seleccione un elemento'}</p><div class="g pg${cols} ${cls||''}">${items.map((x,j)=>chip(id,j,x)).join('')}</div></div><div class="dp" id="dp-${id}" aria-live="polite"></div>`};
+const viz=(id,items,v,hint)=>{PK[id]=items;return `<p class="tag">${hint}</p><div class="row"><div class="vz">${v}</div><div class="dp" id="dp-${id}" aria-live="polite"></div></div>`};
+const showPk=(id,j)=>{const arr=PK[id];if(!arr||!arr[j])return;const x=arr[j],d=$('#dp-'+id);if(!d)return;d.style.setProperty('--k',`var(--c${x.c})`);d.innerHTML=`<h3>${x.h}</h3>${x.d}`};
+const T=(t)=>`<h2>${t}</h2>`;
+const src=(t)=>`<p class="src">Fuentes: ${t}</p>`;
+const nd=(id,j,k,body,label)=>`<g class="nd" data-pk="${id}" data-j="${j}" tabindex="0" role="button" aria-label="${label}" aria-pressed="${j===0}" style="--k:var(--c${k})">${body}</g>`;
+
+/* ring del método científico */
+const ringItems=[
+ {c:1,h:'Observación',d:q('Descripción','identificación sistemática de un fenómeno de interés.')+q('Ejemplo','la producción científica de una dependencia disminuye en dos períodos consecutivos.')},
+ {c:2,h:'Problema',d:q('Descripción','formulación del fenómeno como una pregunta investigable.')+q('Ejemplo','¿qué factores se asocian con la disminución de la producción científica?')},
+ {c:1,h:'Hipótesis',d:q('Descripción','respuesta tentativa, formulada de modo que pueda contrastarse.')+q('Ejemplo','a mayor retención de personal investigador, mayor producción científica.')},
+ {c:2,h:'Contrastación',d:q('Descripción','confrontación de la hipótesis con datos recolectados mediante procedimientos definidos.')+q('Ejemplo','recolectar datos de ambas variables en un mismo período.')},
+ {c:1,h:'Análisis',d:q('Descripción','tratamiento e interpretación de los datos obtenidos.')+q('Ejemplo','estimar estadísticamente la relación entre las variables.')},
+ {c:2,h:'Conclusiones',d:q('Descripción','decisión sobre la hipótesis, con sus limitaciones y recomendaciones.')+q('Ejemplo','aceptar o rechazar la hipótesis y proponer líneas de acción o de estudio.')}];
+function ring(){const cx=210,cy=170,rx=150,ry=118;let s=`<svg viewBox="0 0 420 340" role="group" aria-label="Etapas del método científico"><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="var(--ln)" stroke-width="3" stroke-dasharray="6 7"/><text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="19" fill="var(--mu)">Proceso</text><text x="${cx}" y="${cy+20}" text-anchor="middle" font-size="19" fill="var(--mu)">iterativo</text>`;
+ for(let i=0;i<6;i++){const a=(i*60+30)*Math.PI/180,px=cx+rx*Math.sin(a),py=cy-ry*Math.cos(a),tx=rx*Math.cos(a),ty=ry*Math.sin(a),L=Math.hypot(tx,ty),ux=tx/L,uy=ty/L;
+  s+=`<polygon points="${px+ux*9},${py+uy*9} ${px-ux*7-uy*8},${py-uy*7+ux*8} ${px-ux*7+uy*8},${py-uy*7-ux*8}" fill="var(--mu)"/>`}
+ ringItems.forEach((it,i)=>{const a=i*60*Math.PI/180,px=cx+rx*Math.sin(a),py=cy-ry*Math.cos(a);
+  s+=nd('s5',i,it.c,`<g transform="translate(${px},${py})"><rect class="bx" x="-75" y="-23" width="150" height="46" rx="23"/><text text-anchor="middle" y="6" font-size="17">${it.h}</text><circle r="12" cx="-75" cy="0" fill="var(--sf)" stroke="var(--k)" stroke-width="2.5"/><text x="-75" y="5" text-anchor="middle" font-size="13" style="fill:var(--k)">${i+1}</text></g>`,it.h)});
+ return s+'</svg>'}
+/* Venn */
+const venn=()=>{const C=[[210,100,1,'Sistemática',210,62],[145,205,2,'Crítica',112,225],[275,205,3,'Empírica',308,225]];
+ let s=`<svg viewBox="0 0 420 340" role="group" aria-label="Rasgos de la investigación">`;
+ C.forEach((c,j)=>{s+=nd('s4',j,c[2],`<circle class="bx" cx="${c[0]}" cy="${c[1]}" r="95" style="fill-opacity:.3"/><text x="${c[4]}" y="${c[5]}" text-anchor="middle" font-size="19">${c[3]}</text>`,c[3])});
+ return s+`<circle cx="210" cy="170" r="42" fill="var(--sf)" stroke="var(--mu)" stroke-width="2" pointer-events="none"/><text x="210" y="167" text-anchor="middle" font-size="14" fill="var(--ink)" pointer-events="none">Investigación</text><text x="210" y="185" text-anchor="middle" font-size="14" fill="var(--ink)" pointer-events="none">científica</text></svg>`};
+/* inductivo / deductivo */
+const ind=()=>{let s=`<svg viewBox="0 0 420 340" role="group" aria-label="Métodos inductivo y deductivo"><polygon points="210,48 330,290 90,290" fill="color-mix(in srgb,var(--c6) 14%,var(--sf))" stroke="var(--ln)" stroke-width="2"/><circle cx="210" cy="64" r="9" fill="var(--c6)"/><text x="210" y="32" text-anchor="middle" font-size="17" fill="var(--ink)">Teoría · generalización</text>`;
+ [130,170,210,250,290].forEach(x=>{s+=`<circle cx="${x}" cy="274" r="7" fill="var(--c6)"/>`});
+ s+=`<text x="210" y="322" text-anchor="middle" font-size="17" fill="var(--ink)">Observaciones particulares</text>`;
+ s+=nd('s6',0,1,`<rect x="0" y="0" width="70" height="340" fill="transparent"/><path class="bx" d="M38 292V92" style="fill:none;stroke-width:14;stroke-linecap:butt"/><polygon points="38,52 14,100 62,100" style="fill:var(--k)"/><text transform="translate(60 210) rotate(-90)" text-anchor="middle" font-size="18">INDUCTIVO</text>`,'Método inductivo')
+ s+=nd('s6',1,2,`<rect x="350" y="0" width="70" height="340" fill="transparent"/><path class="bx" d="M382 48V248" style="fill:none;stroke-width:14;stroke-linecap:butt"/><polygon points="382,288 358,240 406,240" style="fill:var(--k)"/><text transform="translate(358 130) rotate(90)" text-anchor="middle" font-size="18">DEDUCTIVO</text>`,'Método deductivo');
+ return s+'</svg>'};
+/* anidado */
+const nest=()=>{const R=[[1,'Metodología · justifica',4,4,412,332,18,34,2],[0,'Método · el camino',28,52,364,264,14,82,1],[2,'Técnica · el procedimiento',52,100,316,176,12,130,3],[3,'Instrumento · la herramienta',76,148,268,100,10,205,4]];
+ let s=`<svg viewBox="0 0 420 340" role="group" aria-label="Relación entre conceptos metodológicos">`;
+ R.forEach(r=>{s+=nd('s7',r[0],r[8],`<rect class="bx" x="${r[2]}" y="${r[3]}" width="${r[4]}" height="${r[5]}" rx="${r[6]}"/><text x="${r[2]+20}" y="${r[7]}" font-size="17">${r[1]}</text>`,r[1])});
+ return s+'</svg>'};
+
+const S=[
+{sec:'Inicio',t:'Portada',h:`<div class="hero"><svg viewBox="0 0 400 640" aria-hidden="true" fill="none" stroke="#fff" stroke-width="1.5"><g opacity=".7"><path d="M320 80L230 190L330 290L200 380L300 500M230 190L120 120M330 290L390 190M200 380L90 330M300 500L180 560"/></g><g fill="#fff" stroke="none"><circle cx="320" cy="80" r="9"/><circle cx="230" cy="190" r="14"/><circle cx="330" cy="290" r="10"/><circle cx="200" cy="380" r="16"/><circle cx="300" cy="500" r="11"/><circle cx="120" cy="120" r="6"/><circle cx="390" cy="190" r="6"/><circle cx="90" cy="330" r="7"/><circle cx="180" cy="560" r="8"/></g></svg><p class="eb">República Bolivariana de Venezuela · UNERMB · Programa de Postgrado</p><p class="eb">Maestría en Gerencia de Innovación Tecnológica</p><h1>Unidad I. Conceptos básicos de investigación</h1><p class="meta">Maestrante: Ing. Luis Solórzano<br>Docente: Dra. Kristel Heredia<br>Cabimas, noviembre de 2025</p><span class="pill">Proyecto I · Actividad I</span><button class="start" id="start-btn" aria-label="Iniciar presentación con locución"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6,4 20,12 6,20"/></svg>Iniciar presentación con locución</button></div>`},
+{sec:'Introducción',t:'Introducción',h:`<p class="tag">Introducción</p><p class="q1">¿Cómo distinguimos una <span>opinión</span> de un conocimiento <span>científico</span>?</p>`+pick('s2',2,[
+ {c:3,h:'Una opinión',s:'«En mi institución se investiga poco.»',i:'cri',d:q('Qué ocurre','la afirmación no define el problema, no mide nada y no puede verificarse.')+q('Resultado','una impresión que depende de quién la formula.')},
+ {c:2,h:'Una investigación',s:'Problema, método y datos',i:'ver',d:q('Qué ocurre','se define el problema, se miden las publicaciones de la institución y se contrastan con una hipótesis.')+q('Resultado','una conclusión que otras personas pueden revisar y replicar.')}],'Seleccione para comparar')+`<p class="lead" style="font-weight:600">Esa diferencia es el eje de esta unidad.</p>`},
+{sec:'Introducción',t:'Propósito y objetivos',h:T('Propósito y objetivos de la presentación')+`<div class="pur"><b>Propósito</b>Exponer los fundamentos conceptuales de la investigación científica que sustentan la construcción del Trabajo Especial de Grado.</div><div class="obj"><div class="ob" style="--k:var(--c1)"><span class="nn">1</span>Definir la investigación, el método científico y los métodos inductivo y deductivo.<div class="pl"><span>Concepto</span><span>Método</span><span>Inducción</span><span>Deducción</span></div><button data-g="3">Ver diapositivas 4 a 6</button></div><div class="ob" style="--k:var(--c2)"><span class="nn">2</span>Diferenciar método, metodología, técnica e instrumento, y reconocer características y tipos.<div class="pl"><span>Metodología</span><span>Técnica</span><span>Tipos</span></div><button data-g="6">Ver diapositivas 7 a 9</button></div><div class="ob" style="--k:var(--c3)"><span class="nn">3</span>Describir la investigación bibliográfica, la estructura de los trabajos y los elementos del proyecto.<div class="pl"><span>Bibliográfica</span><span>Estructura</span><span>Proyecto</span></div><button data-g="9">Ver diapositivas 10 a 13</button></div></div>`+src('Hernández-Sampieri y Mendoza (2018); Bernal (2016); Tamayo y Tamayo (2003).')},
+{sec:'Fundamentos',t:'Concepto de investigación',h:T('Concepto de investigación')+`<p class="lead">Proceso sistemático, crítico y empírico para generar conocimiento sobre un fenómeno (Hernández-Sampieri y Mendoza, 2018).</p>`+viz('s4',[
+ {c:1,h:'Sistemática',d:q('Definición','se desarrolla con un plan de etapas definidas y secuenciadas.')+q('Ejemplo','registrar cada año, con los mismos criterios, la producción científica de una institución.')},
+ {c:2,h:'Crítica',d:q('Definición','examina la evidencia y reconoce las limitaciones del propio estudio.')+q('Ejemplo','descartar explicaciones alternativas antes de atribuir un aumento de publicaciones a una política.')},
+ {c:3,h:'Empírica',d:q('Definición','sustenta las afirmaciones en datos obtenidos de la realidad.')+q('Ejemplo','emplear conteos de publicaciones indexadas, no percepciones.')}],venn(),'Seleccione un rasgo del diagrama')+src('Hernández-Sampieri y Mendoza (2018); Tamayo y Tamayo (2003).')},
+{sec:'Fundamentos',t:'El método científico',h:T('El método científico')+viz('s5',ringItems,ring(),'Seleccione una etapa del ciclo')+src('Tamayo y Tamayo (2003); Bernal (2016).')},
+{sec:'Fundamentos',t:'Métodos inductivo y deductivo',h:T('Métodos inductivo y deductivo')+viz('s6',[
+ {c:1,h:'Método inductivo',d:q('Lógica','de las observaciones particulares se identifican regularidades y se construye una explicación o teoría.')+q('Ejemplo','tras entrevistar a docentes investigadores, se hallan patrones de abandono de proyectos y se formula una explicación.')+q('Uso habitual','estudios exploratorios y de ruta cualitativa.')},
+ {c:2,h:'Método deductivo',d:q('Lógica','de una teoría se derivan hipótesis que se contrastan con datos empíricos.')+q('Ejemplo','desde la teoría del capital intelectual se plantea que mayor gestión del conocimiento se asocia con mayor producción científica.')+q('Uso habitual','estudios de ruta cuantitativa.')}],ind(),'Seleccione una flecha para comparar')+src('Bernal (2016); Hernández-Sampieri y Mendoza (2018).')},
+{sec:'Fundamentos',t:'Método, metodología, técnica e instrumento',h:T('Método, metodología, técnica e instrumento')+viz('s7',[
+ {c:1,h:'Método',d:q('Definición','orden lógico de procedimientos para alcanzar un conocimiento.')+q('Ejemplo','el método hipotético-deductivo.')},
+ {c:2,h:'Metodología',d:q('Definición','análisis y justificación de los métodos y procedimientos que se emplean.')+q('Ejemplo','argumentar por qué un diseño correlacional es coherente con los objetivos.')},
+ {c:3,h:'Técnica',d:q('Definición','procedimiento específico para recolectar información.')+q('Ejemplo','la encuesta, la entrevista, la observación.')},
+ {c:4,h:'Instrumento',d:q('Definición','recurso concreto con el que se registran los datos.')+q('Ejemplo','un cuestionario con escala tipo Likert, validado por juicio de expertos.')}],nest(),'Seleccione un nivel del diagrama')+src('Bernal (2016); Tamayo y Tamayo (2003).')},
+{sec:'Fundamentos',t:'Características de la investigación científica',h:T('Características de la investigación científica')+pick('s8',3,[
+ {c:1,i:'sis',h:'Sistemática',d:q('Implicación','protocolo explícito y secuencia coherente de etapas.')},
+ {c:2,i:'obj',h:'Objetiva',d:q('Implicación','control de sesgos mediante criterios y procedimientos definidos.')},
+ {c:3,i:'ver',h:'Verificable',d:q('Implicación','las afirmaciones pueden contrastarse con evidencia empírica.')},
+ {c:4,i:'rep',h:'Replicable',d:q('Implicación','el procedimiento se describe con suficiente detalle para que otros lo repitan.')},
+ {c:5,i:'cri',h:'Crítica',d:q('Implicación','se examinan las limitaciones y las explicaciones alternativas.')},
+ {c:6,i:'acu',h:'Acumulativa',d:q('Implicación','el estudio se apoya en antecedentes y aporta a una línea de conocimiento.')}],'Seleccione una característica')+src('Hernández-Sampieri y Mendoza (2018); Tamayo y Tamayo (2003).')},
+{sec:'Clasificación',t:'Tipos de investigación científica',h:T('Tipos de investigación científica')+pick('s9',4,[
+ {c:1,i:'obj',h:'Según la finalidad',d:q('Tipos','básica, que amplía el conocimiento teórico; y aplicada, que resuelve un problema concreto.')+q('Ejemplo','caracterizar el capital intelectual (básica) frente a proponer un modelo de gestión (aplicada).')},
+ {c:2,i:'bar',h:'Según el nivel',d:q('Tipos','exploratoria, descriptiva y explicativa; algunos autores añaden el nivel correlacional.')+q('Ejemplo','medir si dos variables se relacionan estadísticamente es un estudio correlacional.')},
+ {c:3,i:'cmp',h:'Según el diseño',d:q('Tipos','documental, de campo y experimental.')+q('Ejemplo','la revisión de literatura es documental; recolectar datos en la institución es de campo.')},
+ {c:4,i:'pie',h:'Según el enfoque',d:q('Tipos','cuantitativo, que mide y analiza estadísticamente; cualitativo, que interpreta significados.')+q('Nota','un mismo estudio combina criterios.')}],'Seleccione un criterio de clasificación')+src('Bernal (2016); Tamayo y Tamayo (2003); Hernández-Sampieri y Mendoza (2018).')},
+{sec:'Clasificación',t:'Investigación bibliográfica',h:T('Investigación bibliográfica')+`<p class="lead">Se fundamenta en fuentes documentales y sustenta el marco teórico. Las fuentes empíricas no deben exceder los cinco años; las obras metodológicas clásicas se citan como fundamento teórico.</p>`+pick('s10',5,[
+ {c:5,h:'Delimitación',s:'Tema y categorías',d:q('Actividad','precisar el tema y las categorías de búsqueda.')+q('Criterio','la delimitación orienta qué fuentes seleccionar.')},
+ {c:5,h:'Búsqueda',s:'Bases y repositorios',d:q('Actividad','localizar libros, artículos arbitrados y tesis.')+q('Criterio','verificar autoría, pertinencia y vigencia.')},
+ {c:5,h:'Lectura y fichaje',s:'Lectura crítica',d:q('Actividad','leer críticamente y registrar ideas con su referencia completa.')+q('Criterio','registrar la fuente de inmediato evita perder trazabilidad.')},
+ {c:5,h:'Análisis y síntesis',s:'Articular ideas',d:q('Actividad','comparar y agrupar las ideas por categorías.')+q('Criterio','la síntesis no es una yuxtaposición de citas.')},
+ {c:5,h:'Redacción',s:'Citas y referencias',d:q('Actividad','elaborar el texto con citas y referencias.')+q('Criterio','toda idea ajena debe estar debidamente atribuida.')}],'Seleccione una etapa','tl')+src('Bernal (2016); Hernández-Sampieri y Mendoza (2018).')},
+{sec:'Proyecto',t:'Estructura de trabajos científicos',h:T('Estructura de trabajos científicos')+viz('s11',[
+ {c:1,h:'Preliminares',d:q('Contenido','portada, aprobación, dedicatoria y agradecimientos, índices y resumen.')+q('Función','identificar el trabajo y facilitar su consulta.')},
+ {c:2,h:'Cuerpo',d:q('Contenido','introducción, capítulos, conclusiones y recomendaciones.')+q('Función','exponer el problema, el sustento teórico, el método, los resultados y su discusión.')},
+ {c:3,h:'Finales',d:q('Contenido','referencias y anexos.')+q('Función','sustentar y permitir verificar lo expuesto en el cuerpo.')}],`<div class="stack" style="height:100%"><button class="band" data-pk="s11" data-j="0" aria-pressed="true" style="--k:var(--c1);height:96px">Preliminares<small>Antes del texto central</small></button><button class="band" data-pk="s11" data-j="1" aria-pressed="false" style="--k:var(--c2);height:190px">Cuerpo<small>Desarrollo de la investigación</small></button><button class="band" data-pk="s11" data-j="2" aria-pressed="false" style="--k:var(--c3);height:96px">Finales<small>Respaldo documental</small></button></div>`,'Seleccione una parte del documento')+src('Bernal (2016); Tamayo y Tamayo (2003).')},
+{sec:'Proyecto',t:'Anteproyecto y proyecto de investigación',h:T('Anteproyecto y proyecto de investigación')+pick('s12',2,[
+ {c:1,i:'doc',h:'Anteproyecto',s:'Documento preliminar y sintético',bar:35,d:q('Definición','versión preliminar de la investigación propuesta.')+q('Contenido','problema, objetivos, justificación y esquema metodológico.')+q('Función','se somete a evaluación para su aprobación.')},
+ {c:2,i:'docs',h:'Proyecto',s:'Documento ampliado y fundamentado',bar:100,d:q('Definición','desarrollo ampliado del anteproyecto aprobado.')+q('Contenido','marco teórico, diseño metodológico completo y cronograma.')+q('Función','orienta la ejecución de la investigación.')}],'Seleccione un documento para compararlo')+src('Bernal (2016); Tamayo y Tamayo (2003).')},
+{sec:'Proyecto',t:'Elementos del proyecto de investigación',h:T('Elementos del proyecto de investigación')+pick('s13',4,[
+ {c:1,h:'Título',s:'Delimita el estudio',d:q('Función','precisa el objeto de estudio, las variables y el contexto.')},
+ {c:1,h:'Planteamiento del problema',s:'Situación y pregunta',d:q('Función','describe la situación, su relevancia y formula la pregunta de investigación.')},
+ {c:1,h:'Objetivos',s:'General y específicos',d:q('Función','expresan lo que se pretende lograr, con verbos en infinitivo y de forma verificable.')},
+ {c:1,h:'Justificación',s:'Relevancia del estudio',d:q('Función','argumenta la pertinencia teórica, práctica y social de la investigación.')},
+ {c:2,h:'Marco teórico',s:'Sustento conceptual',d:q('Función','reúne antecedentes, bases teóricas y definición de términos.')},
+ {c:2,h:'Marco metodológico',s:'Diseño del estudio',d:q('Función','define tipo y diseño, población y muestra, técnicas, instrumentos y análisis de datos.')},
+ {c:4,h:'Cronograma',s:'Planificación temporal',d:q('Función','organiza las actividades y los tiempos de ejecución.')},
+ {c:4,h:'Referencias',s:'Fuentes citadas',d:q('Función','lista las fuentes citadas, en el estilo exigido por la institución.')}],'Azul: formulación · Verde: fundamentación y método · Ámbar: gestión')+src('Hernández-Sampieri y Mendoza (2018); Bernal (2016).')},
+{sec:'Cierre',t:'Conclusiones',h:T('Conclusiones')+`<p class="lead" style="font:700 24px/1.3 'Plus Jakarta Sans',sans-serif;color:var(--c1)">La calidad de una investigación se define, en buena medida, antes de recolectar el primer dato: en la coherencia entre el problema, los objetivos y el método.</p><div class="g pg2">${['La investigación científica es sistemática, crítica y empírica.','El método inductivo parte de casos; el deductivo, de una teoría que se contrasta.','Método, metodología, técnica e instrumento son conceptos distintos y complementarios.','El proyecto se estructura en elementos que deben guardar coherencia entre sí.'].map((x,i)=>`<div class="card" style="--k:var(--c${1+i%2})"><b>${i+1}</b><p>${x}</p></div>`).join('')}</div><div class="card" style="--k:var(--c4)"><b>Vinculación con el Trabajo Especial de Grado</b><p>Gestión del capital intelectual y producción científica y tecnológica de la UNERMB: enfoque cuantitativo, lógica deductiva y alcance descriptivo-correlacional.</p></div>`},
+{sec:'Cierre',t:'Referencias',h:T('Referencias')+`<div class="ref"><p>Bernal Torres, C. A. (2016). <i>Metodología de la investigación</i> (4.ª ed.). Pearson Educación.</p><p>Hernández-Sampieri, R. y Mendoza Torres, C. P. (2018). <i>Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta</i>. McGraw-Hill Interamericana.</p><p>Tamayo y Tamayo, M. (2003). <i>El proceso de la investigación científica</i> (4.ª ed.). Limusa.</p></div>`}
+];
+const st=$('#st');let cur=0;
+st.innerHTML=S.map((s,i)=>`<section class="s" id="s${i}" aria-label="${s.t}"><div class="wm" aria-hidden="true">${String(i+1).padStart(2,'0')}</div><div class="mn">${s.h}</div><aside class="md" aria-label="Exposición de la diapositiva ${i+1}"><p class="tag">Exposición del maestrante</p><div class="mb" id="mb-${i}"></div><p class="ms" id="ms-${i}" role="status"></p></aside></section>`).join('');
+$('#pgs').innerHTML=S.map((s,i)=>`<button aria-label="Ir a ${s.t}" data-g="${i}"></button>`).join('');
+$('#il').innerHTML=S.map((s,i)=>`<button data-g="${i}">${i+1}. ${s.t}</button>`).join('');
+Object.keys(PK).forEach(id=>showPk(id,0));
+
+/* Stagger: asignar --i a los hijos de grids y stacks */
+document.querySelectorAll('.g,.obj,.stack').forEach(g=>{
+  [...g.children].forEach((el,i)=>el.style.setProperty('--i',i));
+});
+
+/* ============ RUTA B: audio local por diapositiva ============ */
+function ms(i,t){const el=$('#ms-'+i);if(el)el.textContent=t}
+function paintMedia(i){
+  const b=$('#mb-'+i);if(!b)return;
+  const pad=String(i+1).padStart(2,'0');
+  const src=`./audio/${pad}.m4a`;
+  b.innerHTML=`<div class="mb-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg><span>Locución</span></div><audio controls preload="metadata" src="${src}" aria-label="Locución de la diapositiva ${i+1}"></audio>`;
+  const audio=b.querySelector('audio');
+  audio.addEventListener('error',()=>{
+    audio.dataset.missing='true';
+    b.innerHTML=`<div class="mb-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>Sin audio</span></div><div class="em">Coloque el archivo <code>audio/${pad}.m4a</code> en la carpeta del proyecto.</div>`;
+    ms(i,'Audio no encontrado.');
+  });
+  audio.addEventListener('loadedmetadata',()=>{
+    if(isFinite(audio.duration)){
+      const m=Math.floor(audio.duration/60),s=Math.floor(audio.duration%60);
+      ms(i,`Duración: ${m}:${String(s).padStart(2,'0')}`);
+    }
+  });
+}
+S.forEach((_,i)=>paintMedia(i));
+
+/* ============ Navegación ============ */
+const SEC_COLOR={'Inicio':'--c1','Introducción':'--c2','Fundamentos':'--c5','Clasificación':'--c4','Proyecto':'--c3','Cierre':'--c1'};
+let AUTO=false,tmr=0;
+function go(i){
+  cur=Math.max(0,Math.min(S.length-1,i));
+  S.forEach((_,k)=>{
+    $('#s'+k).classList.toggle('on',k===cur);
+    const b=$('#pgs').children[k];
+    b.className=k<cur?'d':(k===cur?'c':'');
+  });
+  $('#sec').textContent=S[cur].sec;
+  $('#sec').style.color=`var(${SEC_COLOR[S[cur].sec]||'--mu'})`;
+  $('#ct').textContent=(cur+1)+' / '+S.length;
+  $('#ix').classList.remove('on');
+  window.scrollTo(0,0);
+  playCur();
+}
+function playCur(){
+  clearTimeout(tmr);
+  document.querySelectorAll('.mb audio').forEach(e=>e.pause());
+  if(!AUTO)return;
+  const i=cur;
+  const m=document.querySelector('#s'+i+' .mb audio');
+  const nxt=()=>{if(!AUTO||cur!==i)return;if(cur>=S.length-1)setAuto(false);else go(cur+1)};
+  if(m&&m.dataset.missing!=='true'){
+    m.currentTime=0;
+    m.onended=nxt;
+    m.play().catch(()=>{});
+    const schedule=()=>{
+      const dur=(isFinite(m.duration)&&m.duration>0)?m.duration:15;
+      clearTimeout(tmr);
+      tmr=setTimeout(nxt,(dur+2)*1000);
+    };
+    if(isFinite(m.duration)&&m.duration>0)schedule();
+    else m.addEventListener('loadedmetadata',schedule,{once:true});
+  }else{
+    setAuto(false);
+    ms(i,'Sin audio: la reproducción automática se detuvo.');
+  }
+}
+function setAuto(v){
+  AUTO=v;
+  $('#au').textContent=v?'Detener':'Reproducción automática';
+  $('#au').classList.toggle('on',v);
+  if(v)playCur();
+  else{clearTimeout(tmr);document.querySelectorAll('.mb audio').forEach(e=>e.pause())}
+}
+
+/* ============ Música ambiental sintetizada (original, sin derechos) ============ */
+let AC=null,MF=null,MG=null,MON=false,mtm=0,mi=0;
+const CH=[[110,164.81,261.63,329.63],[87.31,130.81,220,329.63],[130.81,196,329.63,392],[98,146.83,246.94,293.66]];
+function chord(t,fs){fs.forEach(f=>{const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.value=f;o.detune.value=(Math.random()-.5)*8;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+1.8);g.gain.linearRampToValueAtTime(0,t+7);o.connect(g);g.connect(MF);o.start(t);o.stop(t+7.2)})}
+function duck(){if(!MG||!MON)return;const pl=[...document.querySelectorAll('.mb audio')].some(e=>!e.paused&&!e.muted&&!e.ended);MG.gain.setTargetAtTime(pl?.02:.11,AC.currentTime,.3)}
+function setMusic(v){
+  MON=v;$('#mu').textContent=v?'Música: sí':'Música: no';
+  if(v){
+    try{
+      if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();MF=AC.createBiquadFilter();MF.type='lowpass';MF.frequency.value=1100;MG=AC.createGain();MG.gain.value=.11;MF.connect(MG);MG.connect(AC.destination)}
+      AC.resume();const step=()=>chord(AC.currentTime+.05,CH[mi++%4]);step();mtm=setInterval(step,6000);duck();
+    }catch(e){MON=false;$('#mu').textContent='Música: no'}
+  }else{
+    clearInterval(mtm);if(MG)MG.gain.setTargetAtTime(0,AC.currentTime,.4);
+    setTimeout(()=>{if(!MON&&AC)AC.suspend()},2000);
+  }
+}
+['play','pause','ended'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.matches&&e.target.matches('audio'))setTimeout(duck,50)},true));
+
+/* ============ Eventos ============ */
+function sel(el){const id=el.dataset.pk,j=+el.dataset.j;document.querySelectorAll(`[data-pk="${id}"]`).forEach(x=>x.setAttribute('aria-pressed',x===el));showPk(id,j)}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pk],button');
+  if(!b)return;
+  if(b.dataset.g!==undefined)return go(+b.dataset.g);
+  if(b.dataset.pk)return sel(b);
+});
+$('#pv').onclick=()=>go(cur-1);
+$('#nx').onclick=()=>go(cur+1);
+$('#au').onclick=()=>setAuto(!AUTO);
+$('#mu').onclick=()=>setMusic(!MON);
+$('#ixb').onclick=()=>$('#ix').classList.toggle('on');
+$('#start-btn').onclick=()=>{setAuto(true);if(!MON)setMusic(true)};
+addEventListener('keydown',e=>{
+  const t=e.target;if(t.tagName==='AUDIO'||t.tagName==='VIDEO')return;
+  if((e.key==='Enter'||e.key===' ')&&t.dataset&&t.dataset.pk&&t.tagName!=='BUTTON'){e.preventDefault();return sel(t)}
+  if(e.key==='ArrowRight')go(cur+1);
+  else if(e.key==='ArrowLeft')go(cur-1);
+  else if(e.key==='Home')go(0);
+  else if(e.key==='End')go(S.length-1);
+  else if(e.key==='Escape')$('#ix').classList.remove('on');
+});
+
+/* ============ Tema y reloj ============ */
+const R=document.documentElement,mq=matchMedia('(prefers-color-scheme: dark)');
+const dark=()=>R.dataset.theme?R.dataset.theme==='dark':mq.matches;
+const lab=()=>$('#th').textContent=dark()?'Modo claro':'Modo oscuro';
+$('#th').onclick=()=>{R.dataset.theme=dark()?'light':'dark';lab()};
+mq.onchange=lab;lab();
+const t0=Date.now();
+setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('#clk').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);
+
+/* ============ Ajuste responsivo ============ */
+function fit(){
+  const m=$('#mn'),W=m.clientWidth,Hh=m.clientHeight;
+  const d=innerWidth>=900&&innerWidth/innerHeight>=1.15;
+  document.body.classList.toggle('mob',!d);
+  if(!d){st.style.transform='';return}
+  const k=Math.min((W-40)/1280,(Hh-10)/640);
+  st.style.transform=`translate(${(W-1280*k)/2}px,${(Hh-640*k)/2}px) scale(${k})`;
+}
+if('ResizeObserver' in window)new ResizeObserver(fit).observe($('#mn'));
+addEventListener('resize',fit);
+go(0);fit();
+</script>
+</body>
+</html>
