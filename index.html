@@ -464,6 +464,34 @@ function setMusic(v) {
   )
 );
   
+/* ============ Eventos (navegación, tarjetas, música, índice, teclado) ============ */
+function sel(el){
+  const id=el.dataset.pk,j=+el.dataset.j;
+  document.querySelectorAll(`[data-pk="${id}"]`).forEach(x=>x.setAttribute('aria-pressed',x===el));
+  showPk(id,j);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pk],button');
+  if(!b)return;
+  if(b.dataset.g!==undefined)return go(+b.dataset.g);
+  if(b.dataset.pk)return sel(b);
+});
+$('#pv').onclick=()=>go(cur-1);
+$('#nx').onclick=()=>go(cur+1);
+$('#au').onclick=()=>setAuto(!AUTO);
+$('#mu').onclick=()=>setMusic(!MON);
+$('#ixb').onclick=()=>$('#ix').classList.toggle('on');
+addEventListener('keydown',e=>{
+  const t=e.target;
+  if(t.tagName==='AUDIO'||t.tagName==='VIDEO')return;
+  if((e.key==='Enter'||e.key===' ')&&t.dataset&&t.dataset.pk&&t.tagName!=='BUTTON'){e.preventDefault();return sel(t)}
+  if(e.key==='ArrowRight')go(cur+1);
+  else if(e.key==='ArrowLeft')go(cur-1);
+  else if(e.key==='Home')go(0);
+  else if(e.key==='End')go(S.length-1);
+  else if(e.key==='Escape')$('#ix').classList.remove('on');
+});
+
 /* ============ Tema y reloj ============ */
 const R=document.documentElement,mq=matchMedia('(prefers-color-scheme: dark)');
 const dark=()=>R.dataset.theme?R.dataset.theme==='dark':mq.matches;
