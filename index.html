@@ -347,35 +347,44 @@ function go(i){
   window.scrollTo(0,0);
   playCur();
 }
+/* Un único reproductor de locución para la presentación automática.
+   iOS/Safari solo permiten reproducir sin gesto un elemento que ya fue activado
+   por un toque; por eso se reutiliza el mismo elemento y solo se cambia su src. */
+const NARR=new Audio();
+NARR.preload='auto';
+NARR.playsInline=true;
 function playCur(){
   clearTimeout(tmr);
   document.querySelectorAll('.mb audio').forEach(e=>e.pause());
+  NARR.onended=null;NARR.onerror=null;NARR.onloadedmetadata=null;
+  NARR.pause();
   if(!AUTO)return;
   const i=cur;
-  const m=document.querySelector('#s'+i+' .mb audio');
+  const pad=String(i+1).padStart(2,'0');
   const nxt=()=>{if(!AUTO||cur!==i)return;if(cur>=S.length-1)setAuto(false);else go(cur+1)};
-  if(m&&m.dataset.missing!=='true'){
-    m.currentTime=0;
-    m.onended=nxt;
-    m.play().catch(()=>{});
-    const schedule=()=>{
-      const dur=(isFinite(m.duration)&&m.duration>0)?m.duration:15;
-      clearTimeout(tmr);
-      tmr=setTimeout(nxt,(dur+2)*1000);
-    };
-    if(isFinite(m.duration)&&m.duration>0)schedule();
-    else m.addEventListener('loadedmetadata',schedule,{once:true});
-  }else{
+  if(!$('#mb-'+i+' audio')){
     setAuto(false);
     ms(i,'Sin audio: la reproducción automática se detuvo.');
+    return;
   }
+  NARR.src=`./audio/${pad}.m4a`;
+  NARR.onended=nxt;
+  NARR.onerror=()=>{ms(i,'No se pudo cargar la locución.');setAuto(false)};
+  NARR.onloadedmetadata=()=>{
+    if(isFinite(NARR.duration)&&NARR.duration>0){clearTimeout(tmr);tmr=setTimeout(nxt,(NARR.duration+3)*1000)}
+  };
+  const pr=NARR.play();
+  if(pr&&pr.catch)pr.catch(()=>{
+    ms(i,'El navegador bloqueó el audio. Toque «Reproducción automática» otra vez.');
+    setAuto(false);
+  });
 }
 function setAuto(v){
   AUTO=v;
   $('#au').textContent=v?'Detener':'Reproducción automática';
   $('#au').classList.toggle('on',v);
   if(v)playCur();
-  else{clearTimeout(tmr);document.querySelectorAll('.mb audio').forEach(e=>e.pause())}
+  else{clearTimeout(tmr);NARR.pause();document.querySelectorAll('.mb audio').forEach(e=>e.pause())}
 }
 
 /* ============ Música ambiental (multiplataforma: Windows, Android e iOS) ============ */
@@ -424,7 +433,7 @@ function duck() {
   if (!MON) return;
   const pl = [...document.querySelectorAll('.mb audio')].some(
     e => !e.paused && !e.muted && !e.ended
-  );
+  ) || (!NARR.paused && !NARR.ended);
   // 15% con locución | 35% sin locución
   setBGMVolume(pl ? 0.15 : 0.35);
 
@@ -452,6 +461,7 @@ function setMusic(v) {
   }
 }
 
+['play', 'pause', 'ended'].forEach(ev => NARR.addEventListener(ev, () => setTimeout(duck, 60)));
 ['play', 'pause', 'ended'].forEach(ev =>
   document.addEventListener(
     ev,
